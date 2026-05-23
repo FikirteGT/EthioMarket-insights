@@ -26,10 +26,12 @@ import {
 } from 'recharts';
 import { Download, Map, BarChart3, PieChartIcon, Activity, Share2 } from 'lucide-react';
 import { MARKETS, PRODUCTS, MOCK_PRICES } from '../data/mockData';
+import { useLocalization } from '../contexts/LocalizationContext';
 
 const DataVisualization: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState(PRODUCTS[0].id);
   const [chartType, setChartType] = useState<'line' | 'bar' | 'area'>('line');
+  const { t, formatCurrency } = useLocalization();
 
   // Price comparison data
   const priceComparisonData = MARKETS.map(market => {
@@ -178,24 +180,24 @@ const DataVisualization: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Data Visualization</h1>
-          <p className="text-slate-600">Interactive charts and market analytics</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">{t('viz.title')}</h1>
+          <p className="text-slate-600">{t('viz.subtitle')}</p>
         </div>
         <div className="flex gap-2">
           <Button onClick={exportToCSV} variant="outline" className="gap-2">
             <Download size={16} />
-            Export CSV
+            {t('viz.exportCSV')}
           </Button>
           <Button onClick={exportToJSON} variant="outline" className="gap-2">
             <Download size={16} />
-            Export JSON
+            {t('viz.exportJSON')}
           </Button>
         </div>
       </div>
 
       {/* Product Selector */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-slate-700 mb-2">Select Commodity</label>
+        <label className="block text-sm font-medium text-slate-700 mb-2">{t('dashboard.selectCommodity')}</label>
         <div className="flex flex-wrap gap-2">
           {PRODUCTS.map(product => (
             <button
@@ -217,23 +219,23 @@ const DataVisualization: React.FC = () => {
         <TabsList className="grid w-full grid-cols-5 max-w-3xl">
           <TabsTrigger value="trends">
             <Activity size={16} className="mr-1" />
-            Trends
+            {t('viz.trends')}
           </TabsTrigger>
           <TabsTrigger value="comparison">
             <BarChart3 size={16} className="mr-1" />
-            Compare
+            {t('viz.compare')}
           </TabsTrigger>
           <TabsTrigger value="distribution">
             <PieChartIcon size={16} className="mr-1" />
-            Distribution
+            {t('viz.distribution')}
           </TabsTrigger>
           <TabsTrigger value="performance">
             <Activity size={16} className="mr-1" />
-            Performance
+            {t('viz.performance')}
           </TabsTrigger>
           <TabsTrigger value="map">
             <Map size={16} className="mr-1" />
-            Map View
+            {t('viz.mapView')}
           </TabsTrigger>
         </TabsList>
 
@@ -243,8 +245,8 @@ const DataVisualization: React.FC = () => {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>12-Week Price Trends</CardTitle>
-                  <p className="text-sm text-slate-500 mt-1">Historical price movements across major markets</p>
+                  <CardTitle>{t('viz.weekTrends')}</CardTitle>
+                  <p className="text-sm text-slate-500 mt-1">{t('dashboard.historicalMovement')}</p>
                 </div>
                 <div className="flex gap-2">
                   <Button
@@ -252,21 +254,21 @@ const DataVisualization: React.FC = () => {
                     variant={chartType === 'line' ? 'default' : 'outline'}
                     onClick={() => setChartType('line')}
                   >
-                    Line
+                    {t('viz.line')}
                   </Button>
                   <Button
                     size="sm"
                     variant={chartType === 'bar' ? 'default' : 'outline'}
                     onClick={() => setChartType('bar')}
                   >
-                    Bar
+                    {t('viz.bar')}
                   </Button>
                   <Button
                     size="sm"
                     variant={chartType === 'area' ? 'default' : 'outline'}
                     onClick={() => setChartType('area')}
                   >
-                    Area
+                    {t('viz.area')}
                   </Button>
                 </div>
               </div>
@@ -281,8 +283,8 @@ const DataVisualization: React.FC = () => {
         <TabsContent value="comparison">
           <Card>
             <CardHeader>
-              <CardTitle>Market Price Comparison</CardTitle>
-              <p className="text-sm text-slate-500">Current prices across all markets</p>
+              <CardTitle>{t('viz.marketComparison')}</CardTitle>
+              <p className="text-sm text-slate-500">{t('viz.currentPrices')}</p>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={400}>
@@ -306,8 +308,8 @@ const DataVisualization: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Market Share by Region</CardTitle>
-                <p className="text-sm text-slate-500">Trading volume distribution</p>
+                <CardTitle>{t('viz.marketShare')}</CardTitle>
+                <p className="text-sm text-slate-500">{t('viz.tradingVolume')}</p>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -334,8 +336,8 @@ const DataVisualization: React.FC = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Price Volatility Index</CardTitle>
-                <p className="text-sm text-slate-500">Price stability across commodities</p>
+                <CardTitle>{t('viz.volatilityIndex')}</CardTitle>
+                <p className="text-sm text-slate-500">{t('viz.priceStability')}</p>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -359,8 +361,8 @@ const DataVisualization: React.FC = () => {
         <TabsContent value="performance">
           <Card>
             <CardHeader>
-              <CardTitle>Product Performance Radar</CardTitle>
-              <p className="text-sm text-slate-500">Multi-dimensional product analysis</p>
+              <CardTitle>{t('viz.productPerformance')}</CardTitle>
+              <p className="text-sm text-slate-500">{t('viz.multiDimensional')}</p>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={500}>
@@ -383,14 +385,14 @@ const DataVisualization: React.FC = () => {
         <TabsContent value="map">
           <Card>
             <CardHeader>
-              <CardTitle>Ethiopian Market Map</CardTitle>
-              <p className="text-sm text-slate-500">Geographic distribution of markets and prices</p>
+              <CardTitle>{t('viz.ethiopianMap')}</CardTitle>
+              <p className="text-sm text-slate-500">{t('viz.geographicDist')}</p>
             </CardHeader>
             <CardContent>
               <div className="relative bg-slate-100 rounded-lg p-8 min-h-[500px] flex items-center justify-center">
                 <div className="text-center">
                   <Map size={64} className="mx-auto text-slate-400 mb-4" />
-                  <h3 className="text-xl font-semibold text-slate-700 mb-2">Interactive Map View</h3>
+                  <h3 className="text-xl font-semibold text-slate-700 mb-2">{t('viz.interactiveMap')}</h3>
                   <p className="text-slate-500 max-w-md">
                     Geographic visualization of Ethiopian markets with price overlays. 
                     Integration with mapping libraries like Leaflet or Mapbox can be added here.
@@ -408,7 +410,7 @@ const DataVisualization: React.FC = () => {
                           </div>
                           <p className="text-sm text-slate-600">{market.region}</p>
                           <p className="text-lg font-bold text-green-600 mt-2">
-                            {priceData?.price.toLocaleString() || 'N/A'} ETB
+                            {formatCurrency(priceData?.price || 0)}
                           </p>
                           <p className="text-xs text-slate-500">
                             Lat: {market.lat.toFixed(4)}, Lng: {market.lng.toFixed(4)}

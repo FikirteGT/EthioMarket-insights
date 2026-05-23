@@ -14,10 +14,12 @@ import {
   BarChart3
 } from 'lucide-react';
 import { MOCK_NEWS, ECONOMIC_INDICATORS, NewsArticle } from '../data/newsData';
+import { useLocalization } from '../contexts/LocalizationContext';
 
 const MarketNews: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedImpact, setSelectedImpact] = useState<string>('all');
+  const { t, formatDate } = useLocalization();
 
   const filteredNews = MOCK_NEWS.filter(article => {
     const categoryMatch = selectedCategory === 'all' || article.category === selectedCategory;
@@ -64,27 +66,27 @@ const MarketNews: React.FC = () => {
     }
   };
 
-  const formatDate = (dateString: string) => {
+  const formatDateString = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return formatDate(date);
   };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Market News & Insights</h1>
-        <p className="text-slate-600">Stay informed with the latest agricultural market updates and economic indicators</p>
+        <h1 className="text-3xl font-bold text-slate-900 mb-2">{t('news.title')}</h1>
+        <p className="text-slate-600">{t('news.subtitle')}</p>
       </div>
 
       <Tabs defaultValue="news" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 max-w-md">
           <TabsTrigger value="news">
             <Newspaper className="mr-2" size={16} />
-            News & Updates
+            {t('news.newsUpdates')}
           </TabsTrigger>
           <TabsTrigger value="indicators">
             <BarChart3 className="mr-2" size={16} />
-            Economic Indicators
+            {t('news.economicIndicators')}
           </TabsTrigger>
         </TabsList>
 
@@ -95,11 +97,11 @@ const MarketNews: React.FC = () => {
             <CardContent className="pt-6">
               <div className="flex items-center gap-2 mb-4">
                 <Filter size={18} className="text-slate-600" />
-                <span className="font-medium text-slate-700">Filter News</span>
+                <span className="font-medium text-slate-700">{t('news.filterNews')}</span>
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Category</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">{t('news.category')}</label>
                   <div className="flex flex-wrap gap-2">
                     {['all', 'market', 'policy', 'economic', 'agriculture'].map(category => (
                       <button
@@ -111,13 +113,13 @@ const MarketNews: React.FC = () => {
                             : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                         }`}
                       >
-                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                        {t(`news.${category}`)}
                       </button>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Impact Level</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">{t('news.impactLevel')}</label>
                   <div className="flex flex-wrap gap-2">
                     {['all', 'high', 'medium', 'low'].map(impact => (
                       <button
@@ -129,7 +131,7 @@ const MarketNews: React.FC = () => {
                             : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                         }`}
                       >
-                        {impact.charAt(0).toUpperCase() + impact.slice(1)}
+                        {t(`news.${impact}`)}
                       </button>
                     ))}
                   </div>
@@ -149,7 +151,7 @@ const MarketNews: React.FC = () => {
                     </Badge>
                     <Badge variant="outline" className={getImpactColor(article.impact)}>
                       <AlertCircle size={12} className="mr-1" />
-                      {article.impact.toUpperCase()} Impact
+                      {t(`news.${article.impact}`).toUpperCase()} {t('news.impact')}
                     </Badge>
                   </div>
                   <CardTitle className="text-lg leading-tight">{article.title}</CardTitle>
@@ -164,7 +166,7 @@ const MarketNews: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-1">
                         <Calendar size={14} />
-                        <span>{formatDate(article.date)}</span>
+                        <span>{formatDateString(article.date)}</span>
                       </div>
                     </div>
                     {article.region && (
@@ -182,7 +184,7 @@ const MarketNews: React.FC = () => {
             <Card>
               <CardContent className="py-12 text-center">
                 <Newspaper size={48} className="mx-auto text-slate-300 mb-4" />
-                <p className="text-slate-500">No news articles match your filters</p>
+                <p className="text-slate-500">{t('news.noArticles')}</p>
               </CardContent>
             </Card>
           )}
@@ -234,7 +236,7 @@ const MarketNews: React.FC = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertCircle className="text-green-600" />
-                Key Economic Insights
+                {t('news.keyInsights')}
               </CardTitle>
             </CardHeader>
             <CardContent>

@@ -7,8 +7,9 @@ import MarketNews from './components/MarketNews';
 import DataVisualization from './components/DataVisualization';
 import { analyzeMarkets, AnalysisResult } from './lib/engine';
 import { Toaster } from './components/ui/sonner';
-import { Sprout, Menu, Globe, BarChart3, Newspaper, LineChart } from 'lucide-react';
+import { Sprout, Menu, Globe, BarChart3, Newspaper, LineChart, Languages } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLocalization } from './contexts/LocalizationContext';
 
 type Page = 'home' | 'input' | 'results' | 'dashboard' | 'news' | 'visualization';
 
@@ -16,6 +17,11 @@ function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [analysisResults, setAnalysisResults] = useState<AnalysisResult[]>([]);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { language, setLanguage, t } = useLocalization();
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'am' : 'en');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -104,7 +110,7 @@ function App() {
               }`}
             >
               <BarChart3 size={18} />
-              <span>Dashboard</span>
+              <span>{t('nav.dashboard')}</span>
             </button>
             <button
               onClick={handleGoToVisualization}
@@ -117,7 +123,7 @@ function App() {
               }`}
             >
               <LineChart size={18} />
-              <span>Charts</span>
+              <span>{t('nav.charts')}</span>
             </button>
             <button
               onClick={handleGoToNews}
@@ -130,14 +136,17 @@ function App() {
               }`}
             >
               <Newspaper size={18} />
-              <span>News</span>
+              <span>{t('nav.news')}</span>
             </button>
-            <div className={`hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full border text-sm font-medium transition-colors ${
-              currentPage === 'home' && !isScrolled ? 'bg-white/10 border-white/20 text-white' : 'bg-slate-100 border-slate-200 text-slate-600'
-            }`}>
-              <Globe size={14} />
-              <span>English</span>
-            </div>
+            <button
+              onClick={toggleLanguage}
+              className={`hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full border text-sm font-medium transition-colors cursor-pointer ${
+                currentPage === 'home' && !isScrolled ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' : 'bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              <Languages size={14} />
+              <span>{language === 'en' ? 'English' : 'አማርኛ'}</span>
+            </button>
             <button className={`p-2 rounded-lg transition-colors ${
               currentPage === 'home' && !isScrolled ? 'text-white hover:bg-white/10' : 'text-slate-600 hover:bg-slate-100'
             }`}>

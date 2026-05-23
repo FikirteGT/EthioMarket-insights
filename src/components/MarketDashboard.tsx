@@ -6,9 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { TrendingUp, TrendingDown, Minus, MapPin, Download, Share2 } from 'lucide-react';
 import { MARKETS, PRODUCTS, MOCK_PRICES } from '../data/mockData';
+import { useLocalization } from '../contexts/LocalizationContext';
 
 const MarketDashboard: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState(PRODUCTS[0].id);
+  const { t, formatCurrency } = useLocalization();
 
   // Get price data for selected product across markets
   const productPrices = MARKETS.map(market => {
@@ -88,20 +90,20 @@ const MarketDashboard: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Market Data Dashboard</h1>
-          <p className="text-slate-600">Real-time commodity prices and market insights</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">{t('dashboard.title')}</h1>
+          <p className="text-slate-600">{t('dashboard.subtitle')}</p>
         </div>
         <div className="flex gap-2">
           <Button onClick={exportData} variant="outline" className="gap-2">
             <Download size={16} />
-            Export Data
+            {t('dashboard.exportData')}
           </Button>
         </div>
       </div>
 
       {/* Product Selector */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-slate-700 mb-2">Select Commodity</label>
+        <label className="block text-sm font-medium text-slate-700 mb-2">{t('dashboard.selectCommodity')}</label>
         <div className="flex flex-wrap gap-2">
           {PRODUCTS.map(product => (
             <button
@@ -121,9 +123,9 @@ const MarketDashboard: React.FC = () => {
 
       <Tabs defaultValue="prices" className="space-y-6">
         <TabsList className="grid w-full grid-cols-3 max-w-md">
-          <TabsTrigger value="prices">Current Prices</TabsTrigger>
-          <TabsTrigger value="trends">Price Trends</TabsTrigger>
-          <TabsTrigger value="regional">Regional View</TabsTrigger>
+          <TabsTrigger value="prices">{t('dashboard.currentPrices')}</TabsTrigger>
+          <TabsTrigger value="trends">{t('dashboard.priceTrends')}</TabsTrigger>
+          <TabsTrigger value="regional">{t('dashboard.regionalView')}</TabsTrigger>
         </TabsList>
 
         {/* Current Prices Tab */}
@@ -143,17 +145,17 @@ const MarketDashboard: React.FC = () => {
                     <Badge className={getTrendColor(item.trend)}>
                       <div className="flex items-center gap-1">
                         {getTrendIcon(item.trend)}
-                        <span className="capitalize">{item.trend}</span>
+                        <span className="capitalize">{t(`trend.${item.trend}`)}</span>
                       </div>
                     </Badge>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold text-slate-900">
-                    {item.price.toLocaleString()} <span className="text-lg text-slate-500">ETB</span>
+                    {formatCurrency(item.price)}
                   </div>
                   <p className="text-sm text-slate-500 mt-1">
-                    per {PRODUCTS.find(p => p.id === selectedProduct)?.unit}
+                    {t('common.per')} {PRODUCTS.find(p => p.id === selectedProduct)?.unit}
                   </p>
                 </CardContent>
               </Card>
@@ -165,8 +167,8 @@ const MarketDashboard: React.FC = () => {
         <TabsContent value="trends">
           <Card>
             <CardHeader>
-              <CardTitle>6-Week Price Trends</CardTitle>
-              <p className="text-sm text-slate-500">Historical price movements across major markets</p>
+              <CardTitle>{t('dashboard.weekTrends')}</CardTitle>
+              <p className="text-sm text-slate-500">{t('dashboard.historicalMovement')}</p>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={400}>
@@ -193,8 +195,8 @@ const MarketDashboard: React.FC = () => {
         <TabsContent value="regional">
           <Card>
             <CardHeader>
-              <CardTitle>Regional Price Comparison</CardTitle>
-              <p className="text-sm text-slate-500">Average prices across Ethiopian regions</p>
+              <CardTitle>{t('dashboard.regionalComparison')}</CardTitle>
+              <p className="text-sm text-slate-500">{t('dashboard.avgPrices')}</p>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={400}>
@@ -216,10 +218,10 @@ const MarketDashboard: React.FC = () => {
                   <div key={index} className="p-4 bg-slate-50 rounded-lg">
                     <h4 className="font-semibold text-slate-900">{region.region}</h4>
                     <p className="text-2xl font-bold text-green-600 mt-2">
-                      {region.avgPrice.toLocaleString()} ETB
+                      {formatCurrency(region.avgPrice)}
                     </p>
                     <p className="text-sm text-slate-500 mt-1">
-                      {region.markets} market{region.markets > 1 ? 's' : ''}
+                      {region.markets} {region.markets > 1 ? t('dashboard.markets') : t('dashboard.market')}
                     </p>
                   </div>
                 ))}

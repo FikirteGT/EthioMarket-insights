@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Sprout, TrendingUp, Truck, MapPin, ChevronRight, Info, BarChart3, Newspaper } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
+import { useLocalization } from '../contexts/LocalizationContext';
 
 interface HomeProps {
   onStart: () => void;
@@ -11,6 +12,8 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ onStart, onDashboard, onNews }) => {
+  const { t } = useLocalization();
+  
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       {/* Hero Section */}
@@ -32,10 +35,10 @@ const Home: React.FC<HomeProps> = ({ onStart, onDashboard, onNews }) => {
               <Sprout size={48} />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Farmer Market Price Intelligence Tool
+              {t('home.title')}
             </h1>
             <p className="text-xl text-gray-200 mb-8">
-              Maximize your net profit by finding the best markets for your crops using official Ethiopian NMIS data.
+              {t('home.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
@@ -43,7 +46,7 @@ const Home: React.FC<HomeProps> = ({ onStart, onDashboard, onNews }) => {
                 className="bg-green-600 hover:bg-green-700 text-white text-lg px-8 py-6 rounded-xl shadow-lg transition-all"
                 onClick={onStart}
               >
-                Start Price Analysis <ChevronRight className="ml-2" />
+                {t('home.startAnalysis')} <ChevronRight className="ml-2" />
               </Button>
               <div className="flex gap-4">
                 {onDashboard && (
@@ -54,7 +57,7 @@ const Home: React.FC<HomeProps> = ({ onStart, onDashboard, onNews }) => {
                     onClick={onDashboard}
                   >
                     <BarChart3 className="mr-2" size={20} />
-                    Dashboard
+                    {t('home.viewDashboard')}
                   </Button>
                 )}
                 {onNews && (
@@ -65,7 +68,7 @@ const Home: React.FC<HomeProps> = ({ onStart, onDashboard, onNews }) => {
                     onClick={onNews}
                   >
                     <Newspaper className="mr-2" size={20} />
-                    News
+                    {t('home.viewNews')}
                   </Button>
                 )}
               </div>
@@ -77,22 +80,22 @@ const Home: React.FC<HomeProps> = ({ onStart, onDashboard, onNews }) => {
       {/* Features Grid */}
       <section className="py-16 px-4 bg-slate-50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-slate-900">How It Works</h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-slate-900">{t('home.howItWorks')}</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <FeatureCard 
               icon={<TrendingUp className="text-green-600" size={32} />}
-              title="Official Prices"
-              description="Accessed weekly data from the National Market Information System (NMIS) managed by ATI."
+              title={t('home.officialPrices')}
+              description={t('home.officialPricesDesc')}
             />
             <FeatureCard 
               icon={<Truck className="text-amber-600" size={32} />}
-              title="Transport Costs"
-              description="Calculate realistic transport expenses based on distance and vehicle type."
+              title={t('home.transportCosts')}
+              description={t('home.transportCostsDesc')}
             />
             <FeatureCard 
               icon={<MapPin className="text-blue-600" size={32} />}
-              title="Smart Profit"
-              description="We calculate your actual net profit (Price - Transport) to find the best deal."
+              title={t('home.smartProfit')}
+              description={t('home.smartProfitDesc')}
             />
           </div>
         </div>
@@ -103,11 +106,10 @@ const Home: React.FC<HomeProps> = ({ onStart, onDashboard, onNews }) => {
         <div className="max-w-4xl mx-auto px-4 text-center text-slate-500">
           <div className="inline-flex items-center gap-2 mb-2 font-semibold text-slate-700">
             <Info size={18} />
-            <span>Data Transparency</span>
+            <span>{t('home.dataTransparency')}</span>
           </div>
           <p className="text-sm">
-            This tool uses official Ethiopian market price data from the National Market Information System (NMIS). 
-            Prices are updated weekly and reflect the official recorded rates for major regions.
+            {t('home.dataTransparencyDesc')}
           </p>
         </div>
       </section>
