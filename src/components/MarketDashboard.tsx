@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
+import { Button } from './ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { TrendingUp, TrendingDown, Minus, MapPin } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, MapPin, Download, Share2 } from 'lucide-react';
 import { MARKETS, PRODUCTS, MOCK_PRICES } from '../data/mockData';
 
 const MarketDashboard: React.FC = () => {
@@ -65,11 +66,37 @@ const MarketDashboard: React.FC = () => {
     }
   };
 
+  // Export functionality
+  const exportData = () => {
+    const data = {
+      product: PRODUCTS.find(p => p.id === selectedProduct)?.name,
+      exportDate: new Date().toISOString(),
+      currentPrices: productPrices,
+      historicalData: historicalData,
+      regionalData: regionalData,
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dashboard-${selectedProduct}-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Market Data Dashboard</h1>
-        <p className="text-slate-600">Real-time commodity prices and market insights</p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Market Data Dashboard</h1>
+          <p className="text-slate-600">Real-time commodity prices and market insights</p>
+        </div>
+        <div className="flex gap-2">
+          <Button onClick={exportData} variant="outline" className="gap-2">
+            <Download size={16} />
+            Export Data
+          </Button>
+        </div>
       </div>
 
       {/* Product Selector */}

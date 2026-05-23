@@ -4,12 +4,13 @@ import InputForm from './components/InputForm';
 import Results from './components/Results';
 import MarketDashboard from './components/MarketDashboard';
 import MarketNews from './components/MarketNews';
+import DataVisualization from './components/DataVisualization';
 import { analyzeMarkets, AnalysisResult } from './lib/engine';
 import { Toaster } from './components/ui/sonner';
-import { Sprout, Menu, Globe, BarChart3, Newspaper } from 'lucide-react';
+import { Sprout, Menu, Globe, BarChart3, Newspaper, LineChart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type Page = 'home' | 'input' | 'results' | 'dashboard' | 'news';
+type Page = 'home' | 'input' | 'results' | 'dashboard' | 'news' | 'visualization';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -63,6 +64,11 @@ function App() {
     window.scrollTo(0, 0);
   };
 
+  const handleGoToVisualization = () => {
+    setCurrentPage('visualization');
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="min-h-screen bg-[#FDFDFD] font-sans selection:bg-green-100 selection:text-green-900">
       <Toaster position="top-center" />
@@ -89,7 +95,7 @@ function App() {
           <div className="flex items-center gap-4">
             <button
               onClick={handleGoToDashboard}
-              className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+              className={`hidden lg:flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                 currentPage === 'dashboard'
                   ? 'bg-green-600 text-white'
                   : currentPage === 'home' && !isScrolled
@@ -99,6 +105,19 @@ function App() {
             >
               <BarChart3 size={18} />
               <span>Dashboard</span>
+            </button>
+            <button
+              onClick={handleGoToVisualization}
+              className={`hidden lg:flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                currentPage === 'visualization'
+                  ? 'bg-green-600 text-white'
+                  : currentPage === 'home' && !isScrolled
+                  ? 'bg-white/10 text-white hover:bg-white/20'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              <LineChart size={18} />
+              <span>Charts</span>
             </button>
             <button
               onClick={handleGoToNews}
@@ -191,6 +210,19 @@ function App() {
               className="pt-24"
             >
               <MarketNews />
+            </motion.div>
+          )}
+
+          {currentPage === 'visualization' && (
+            <motion.div
+              key="visualization"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="pt-24"
+            >
+              <DataVisualization />
             </motion.div>
           )}
         </AnimatePresence>
