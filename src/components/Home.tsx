@@ -1,14 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sprout, TrendingUp, Truck, MapPin, ChevronRight, Info } from 'lucide-react';
+import { Sprout, TrendingUp, Truck, MapPin, ChevronRight, Info, BarChart3 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 
 interface HomeProps {
   onStart: () => void;
+  onDashboard?: () => void;
 }
 
-const Home: React.FC<HomeProps> = ({ onStart }) => {
+const Home: React.FC<HomeProps> = ({ onStart, onDashboard }) => {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       {/* Hero Section */}
@@ -35,13 +36,26 @@ const Home: React.FC<HomeProps> = ({ onStart }) => {
             <p className="text-xl text-gray-200 mb-8">
               Maximize your net profit by finding the best markets for your crops using official Ethiopian NMIS data.
             </p>
-            <Button 
-              size="lg" 
-              className="bg-green-600 hover:bg-green-700 text-white text-lg px-8 py-6 rounded-xl shadow-lg transition-all"
-              onClick={onStart}
-            >
-              Start Price Analysis <ChevronRight className="ml-2" />
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                size="lg" 
+                className="bg-green-600 hover:bg-green-700 text-white text-lg px-8 py-6 rounded-xl shadow-lg transition-all"
+                onClick={onStart}
+              >
+                Start Price Analysis <ChevronRight className="ml-2" />
+              </Button>
+              {onDashboard && (
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="bg-white/10 hover:bg-white/20 text-white border-white/30 text-lg px-8 py-6 rounded-xl shadow-lg transition-all backdrop-blur-sm"
+                  onClick={onDashboard}
+                >
+                  <BarChart3 className="mr-2" />
+                  View Dashboard
+                </Button>
+              )}
+            </div>
           </motion.div>
         </div>
       </section>

@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import Home from './components/Home';
 import InputForm from './components/InputForm';
 import Results from './components/Results';
+import MarketDashboard from './components/MarketDashboard';
 import { analyzeMarkets, AnalysisResult } from './lib/engine';
 import { Toaster } from './components/ui/sonner';
-import { Sprout, Menu, Globe } from 'lucide-react';
+import { Sprout, Menu, Globe, BarChart3 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type Page = 'home' | 'input' | 'results';
+type Page = 'home' | 'input' | 'results' | 'dashboard';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -51,6 +52,11 @@ function App() {
     window.scrollTo(0, 0);
   };
 
+  const handleGoToDashboard = () => {
+    setCurrentPage('dashboard');
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="min-h-screen bg-[#FDFDFD] font-sans selection:bg-green-100 selection:text-green-900">
       <Toaster position="top-center" />
@@ -75,6 +81,19 @@ function App() {
           </div>
           
           <div className="flex items-center gap-4">
+            <button
+              onClick={handleGoToDashboard}
+              className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                currentPage === 'dashboard'
+                  ? 'bg-green-600 text-white'
+                  : currentPage === 'home' && !isScrolled
+                  ? 'bg-white/10 text-white hover:bg-white/20'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              <BarChart3 size={18} />
+              <span>Dashboard</span>
+            </button>
             <div className={`hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full border text-sm font-medium transition-colors ${
               currentPage === 'home' && !isScrolled ? 'bg-white/10 border-white/20 text-white' : 'bg-slate-100 border-slate-200 text-slate-600'
             }`}>
@@ -100,7 +119,7 @@ function App() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Home onStart={handleStartAnalysis} />
+              <Home onStart={handleStartAnalysis} onDashboard={handleGoToDashboard} />
             </motion.div>
           )}
 
@@ -127,6 +146,19 @@ function App() {
               className="pt-24"
             >
               <Results results={analysisResults} onBack={handleBackToInput} />
+            </motion.div>
+          )}
+
+          {currentPage === 'dashboard' && (
+            <motion.div
+              key="dashboard"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="pt-24"
+            >
+              <MarketDashboard />
             </motion.div>
           )}
         </AnimatePresence>
