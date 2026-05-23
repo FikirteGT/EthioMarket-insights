@@ -3,12 +3,13 @@ import Home from './components/Home';
 import InputForm from './components/InputForm';
 import Results from './components/Results';
 import MarketDashboard from './components/MarketDashboard';
+import MarketNews from './components/MarketNews';
 import { analyzeMarkets, AnalysisResult } from './lib/engine';
 import { Toaster } from './components/ui/sonner';
-import { Sprout, Menu, Globe, BarChart3 } from 'lucide-react';
+import { Sprout, Menu, Globe, BarChart3, Newspaper } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type Page = 'home' | 'input' | 'results' | 'dashboard';
+type Page = 'home' | 'input' | 'results' | 'dashboard' | 'news';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -57,6 +58,11 @@ function App() {
     window.scrollTo(0, 0);
   };
 
+  const handleGoToNews = () => {
+    setCurrentPage('news');
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="min-h-screen bg-[#FDFDFD] font-sans selection:bg-green-100 selection:text-green-900">
       <Toaster position="top-center" />
@@ -94,6 +100,19 @@ function App() {
               <BarChart3 size={18} />
               <span>Dashboard</span>
             </button>
+            <button
+              onClick={handleGoToNews}
+              className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                currentPage === 'news'
+                  ? 'bg-green-600 text-white'
+                  : currentPage === 'home' && !isScrolled
+                  ? 'bg-white/10 text-white hover:bg-white/20'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              <Newspaper size={18} />
+              <span>News</span>
+            </button>
             <div className={`hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full border text-sm font-medium transition-colors ${
               currentPage === 'home' && !isScrolled ? 'bg-white/10 border-white/20 text-white' : 'bg-slate-100 border-slate-200 text-slate-600'
             }`}>
@@ -119,7 +138,7 @@ function App() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Home onStart={handleStartAnalysis} onDashboard={handleGoToDashboard} />
+              <Home onStart={handleStartAnalysis} onDashboard={handleGoToDashboard} onNews={handleGoToNews} />
             </motion.div>
           )}
 
@@ -159,6 +178,19 @@ function App() {
               className="pt-24"
             >
               <MarketDashboard />
+            </motion.div>
+          )}
+
+          {currentPage === 'news' && (
+            <motion.div
+              key="news"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="pt-24"
+            >
+              <MarketNews />
             </motion.div>
           )}
         </AnimatePresence>

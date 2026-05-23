@@ -1,15 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sprout, TrendingUp, Truck, MapPin, ChevronRight, Info, BarChart3 } from 'lucide-react';
+import { Sprout, TrendingUp, Truck, MapPin, ChevronRight, Info, BarChart3, Newspaper } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 
 interface HomeProps {
   onStart: () => void;
   onDashboard?: () => void;
+  onNews?: () => void;
 }
 
-const Home: React.FC<HomeProps> = ({ onStart, onDashboard }) => {
+const Home: React.FC<HomeProps> = ({ onStart, onDashboard, onNews }) => {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       {/* Hero Section */}
@@ -44,17 +45,30 @@ const Home: React.FC<HomeProps> = ({ onStart, onDashboard }) => {
               >
                 Start Price Analysis <ChevronRight className="ml-2" />
               </Button>
-              {onDashboard && (
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                  className="bg-white/10 hover:bg-white/20 text-white border-white/30 text-lg px-8 py-6 rounded-xl shadow-lg transition-all backdrop-blur-sm"
-                  onClick={onDashboard}
-                >
-                  <BarChart3 className="mr-2" />
-                  View Dashboard
-                </Button>
-              )}
+              <div className="flex gap-4">
+                {onDashboard && (
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="bg-white/10 hover:bg-white/20 text-white border-white/30 text-lg px-6 py-6 rounded-xl shadow-lg transition-all backdrop-blur-sm"
+                    onClick={onDashboard}
+                  >
+                    <BarChart3 className="mr-2" size={20} />
+                    Dashboard
+                  </Button>
+                )}
+                {onNews && (
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="bg-white/10 hover:bg-white/20 text-white border-white/30 text-lg px-6 py-6 rounded-xl shadow-lg transition-all backdrop-blur-sm"
+                    onClick={onNews}
+                  >
+                    <Newspaper className="mr-2" size={20} />
+                    News
+                  </Button>
+                )}
+              </div>
             </div>
           </motion.div>
         </div>
